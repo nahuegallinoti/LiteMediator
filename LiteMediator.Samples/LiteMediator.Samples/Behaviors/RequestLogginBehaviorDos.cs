@@ -10,7 +10,7 @@ public sealed class RequestLogginBehaviorDos<TRequest, TResponse>(ILogger<Reques
 {
     private readonly ILogger<RequestLogginBehaviorDos<TRequest, TResponse>> logger = logger;
 
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestExecutionDelegate<TResponse> next)
+    public async ValueTask<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestExecutionDelegate<TResponse> next)
     {
         logger.LogInformation("INIT 2");
         TResponse result = await next();

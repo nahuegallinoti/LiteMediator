@@ -16,9 +16,9 @@ public class TestRequest : IRequest<string>
 
 public class TestRequestHandler : IRequestHandler<TestRequest, string>
 {
-    public Task<string> Handle(TestRequest request, CancellationToken cancellationToken)
+    public ValueTask<string> Handle(TestRequest request, CancellationToken cancellationToken)
     {
-        return Task.FromResult($"Hello: {request.Name}!");
+        return new ValueTask<string>($"Hello: {request.Name}");
     }
 }
 

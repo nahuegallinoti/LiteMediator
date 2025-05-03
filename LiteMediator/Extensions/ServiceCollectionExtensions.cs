@@ -12,31 +12,14 @@ public static class ServiceCollectionExtensions
         var options = new LiteMediatorOptions();
         configure?.Invoke(options);
 
-        services.Add(new ServiceDescriptor(typeof(ServiceFactory), provider => new ServiceFactory(provider.GetService),
-            options.Lifetime)); services.Add(new ServiceDescriptor(typeof(IMediator), typeof(Mediator), options.Lifetime));
-        
-        // Registramos los handlers encontrados en los assemblies
-        foreach (var assembly in options.Assemblies)
-        {
-            var types = assembly.GetTypes();
+        var serviceFactoryDescriptor = new ServiceDescriptor(typeof(ServiceFactory), provider => new ServiceFactory(provider.GetService), options.Lifetime);
+        services.Add(serviceFactoryDescriptor);
 
-            foreach (var type in types)
-            {
-                foreach (var iface in type.GetInterfaces())
-                {
-                    if (!iface.IsGenericType) continue;
+        var mediatorServiceDescriptor = new ServiceDescriptor(typeof(IMediator), typeof(Mediator), options.Lifetime);
+        services.Add(mediatorServiceDescriptor);
 
-                    var def = iface.GetGenericTypeDefinition();
-
-                    if (def == typeof(IRequestHandler<,>) ||
-                        def == typeof(INotificationHandler<>) ||
-                        def == typeof(IStreamRequestHandler<,>))
-                    {
-                        services.AddScoped(iface, type);
-                    }
-                }
-            }
-        }
+        // Registramos los handlers usando el código generado
+        //LiteMediatorGeneratedRegistrations.RegisterHandlers(services, options.Lifetime);
 
         // Registramos los behaviors
         foreach (var openBehavior in options.OpenBehaviors)
@@ -53,9 +36,9 @@ public static class ServiceCollectionExtensions
 public class LiteMediatorOptions
 {
     public ServiceLifetime Lifetime { get; set; } = ServiceLifetime.Scoped;
-    public Assembly[] Assemblies { get; set; } = [];
+    //public Assembly[] Assemblies { get; set; } = [];
 
-    internal List<Type> OpenBehaviors { get; } = new();
+    internal List<Type> OpenBehaviors { get; } = [];
 
     public void AddOpenBehavior(Type openBehavior)
     {

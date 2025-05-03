@@ -1,7 +1,7 @@
 ﻿namespace LiteMediator.Behaviors;
 
-public interface IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+public interface IPipelineBehavior<TRequest, TResponse>
 {
-    Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, 
+    ValueTask<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
         RequestExecutionDelegate<TResponse> next);
 }

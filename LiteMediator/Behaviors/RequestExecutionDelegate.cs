@@ -1,3 +1,3 @@
 ﻿namespace LiteMediator.Behaviors;
 
-public delegate Task<TResponse> RequestExecutionDelegate<TResponse>();
+public delegate ValueTask<TResponse> RequestExecutionDelegate<TResponse>();

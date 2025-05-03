@@ -16,9 +16,12 @@ public class LiteMediatorTests
     public LiteMediatorTests()
     {
         var services = new ServiceCollection();
+
+        LiteMediatorGeneratedRegistrations.RegisterHandlers(services, ServiceLifetime.Scoped);
+
         services.AddLiteMediator(options =>
         {
-            options.Assemblies = new[] { typeof(TestRequestHandler).Assembly };
+            //options.Assemblies = new[] { typeof(TestRequestHandler).Assembly };
         });
 
         _serviceProvider = services.BuildServiceProvider();
