@@ -10,7 +10,7 @@ public class TestStreamHandler : IStreamRequestHandler<TestStreamRequest, int>
 {
     public async IAsyncEnumerable<int> Handle(TestStreamRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        Console.WriteLine($"{ConsoleColors.Yellow}[{nameof(TestStreamHandler)}] Streaming {request.Count} items...{ConsoleColors.Reset}");
+        StyledConsole.Section($"[{nameof(TestStreamHandler)}] Streaming {request.Count} items...");
 
         for (int i = 0; i < request.Count; i++)
         {
@@ -18,6 +18,6 @@ public class TestStreamHandler : IStreamRequestHandler<TestStreamRequest, int>
             await Task.Delay(10, cancellationToken);
         }
 
-        Console.WriteLine($"{ConsoleColors.Yellow}[{nameof(TestStreamHandler)}] Stream completed.{ConsoleColors.Reset}");
+        StyledConsole.Section($"[{nameof(TestStreamHandler)}] Stream completed.");
     }
 }

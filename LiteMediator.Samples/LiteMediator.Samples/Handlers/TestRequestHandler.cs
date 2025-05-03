@@ -9,7 +9,7 @@ public class TestRequestHandler : IRequestHandler<TestRequest, string>
 {
     public ValueTask<string> Handle(TestRequest request, CancellationToken cancellationToken)
     {
-        Console.WriteLine($"{ConsoleColors.Green}[{nameof(TestRequestHandler)}] Handling request: {request.Message}{ConsoleColors.Reset}");
+        StyledConsole.Success($"[{nameof(TestRequestHandler)}] Handling request: {request.Message}");
         return new ValueTask<string>($"Echo: {request.Message}");
     }
 }

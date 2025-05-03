@@ -9,7 +9,7 @@ public class TestNotificationHandler : INotificationHandler<TestNotification>
 {
     public Task Handle(TestNotification notification, CancellationToken cancellationToken)
     {
-        Console.WriteLine($"{ConsoleColors.Cyan}[{nameof(TestNotificationHandler)}]{ConsoleColors.Reset}: {notification.NotificationText}\n");
+        StyledConsole.Info($"[{nameof(TestNotificationHandler)}]: {notification.NotificationText}\n");
         return Task.CompletedTask;
     }
 }
@@ -18,7 +18,7 @@ public class TestNotificationAnotherHandler : INotificationHandler<TestNotificat
 {
     public Task Handle(TestNotification notification, CancellationToken cancelToken)
     {
-        Console.WriteLine($"{ConsoleColors.Green}[{nameof(TestNotificationAnotherHandler)}]{ConsoleColors.Reset}: {notification.NotificationText}\n");
+        StyledConsole.Success($"[{nameof(TestNotificationAnotherHandler)}]: {notification.NotificationText}\n");
         return Task.CompletedTask;
     }
 }

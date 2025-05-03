@@ -7,7 +7,7 @@ using LiteMediator.Samples.Notifications;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-Console.WriteLine($"{ConsoleColors.Bold}{ConsoleColors.Cyan}=== LiteMediator Sample Started ==={ConsoleColors.Reset}\n");
+StyledConsole.Info("=== LiteMediator Sample Started ===\n");
 
 ServiceCollection services = new();
 
@@ -16,30 +16,26 @@ services.AddLogging(config =>
     config.AddConsole();
 });
 
-// Registro automático de handlers generados
 LiteMediatorGeneratedRegistrations.RegisterHandlers(services, ServiceLifetime.Scoped);
 
 services.AddLiteMediator(options =>
 {
-    //options.Assemblies = [typeof(TestRequestHandler).Assembly];
     options.AddOpenBehavior(typeof(RequestLogginBehavior<,>));
     options.AddOpenBehavior(typeof(RequestLogginBehaviorDos<,>));
 });
 
-
-// Construcción del provider y obtención del mediador
 var provider = services.BuildServiceProvider();
 var mediator = provider.GetRequiredService<IMediator>();
 
 #region Send
-Console.WriteLine($"{ConsoleColors.Bold}{ConsoleColors.Yellow}------ SEND EXAMPLE ------{ConsoleColors.Reset}");
+StyledConsole.Section("------ SEND EXAMPLE ------");
 
 var response = await mediator.Send(new TestRequest("Hello World"));
-Console.WriteLine($"{ConsoleColors.Green}[Send Response]{ConsoleColors.Reset}: {response}\n");
+StyledConsole.Success($"[Send Response]: {response}\n");
 #endregion
 
 #region Publish
-Console.WriteLine($"{ConsoleColors.Bold}{ConsoleColors.Yellow}------ PUBLISH EXAMPLE ------{ConsoleColors.Reset}");
+StyledConsole.Section("------ PUBLISH EXAMPLE ------");
 
 await mediator.Publish(new TestNotification("Notificación de usuario registrado desde publish concreto"));
 
@@ -50,15 +46,15 @@ Console.WriteLine();
 #endregion
 
 #region Stream
-Console.WriteLine($"{ConsoleColors.Bold}{ConsoleColors.Yellow}------ STREAM EXAMPLE ------{ConsoleColors.Reset}");
+StyledConsole.Section("------ STREAM EXAMPLE ------");
 
 await foreach (var item in mediator.CreateStream(new TestStreamRequest(5)))
 {
-    Console.WriteLine($"{ConsoleColors.Magenta}[Stream Item]{ConsoleColors.Reset}: {item}");
+    StyledConsole.Item("Stream Item", item.ToString());
 }
 
 Console.WriteLine();
 #endregion
 
-Console.WriteLine($"{ConsoleColors.Bold}{ConsoleColors.Cyan}=== LiteMediator Sample Finished ==={ConsoleColors.Reset}");
+StyledConsole.Info("=== LiteMediator Sample Finished ===");
 Console.ReadLine();
